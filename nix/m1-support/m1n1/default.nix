@@ -28,11 +28,10 @@ in stdenv.mkDerivation rec {
   version = "1.1.8";
 
   src = fetchFromGitHub {
-    # tracking: https://github.com/AsahiLinux/PKGBUILDs/blob/stable/m1n1/PKGBUILD
     owner = "AsahiLinux";
     repo = "m1n1";
-    rev = "v${version}";
-    hash = "sha256-4Ykh+EzOCRtZQD1upUDJpi5ikMOCnxLwvLWajtMo7LU=";
+    rev = "a797dbdd7cfd8bf79f5977f07ba29943f8311d96"; # from lina/gpu-wip
+    hash = "sha256-7sierABXKMJX8Vxsz0U8hFy5tgi4EyHE0YpDE4/18ww=";
     fetchSubmodules = true;
   };
 
