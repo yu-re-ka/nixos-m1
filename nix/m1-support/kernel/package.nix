@@ -25,7 +25,7 @@
     echo "{ }" >> $out
   '').outPath;
 
-  linux_asahi_pkg = { stdenv, lib, fetchFromGitHub, fetchpatch, linuxKernel, ... } @ args:
+  linux_asahi_pkg = { stdenv, lib, fetchFromGitHub, fetchpatch, linuxKernel, extraMakeFlags, ... } @ args:
     let
       configfile = if kernelPatches == [ ] then ./config else
       pkgs.writeText "config" ''
@@ -38,17 +38,16 @@
       _kernelPatches = kernelPatches;
     in
     linuxKernel.manualConfig rec {
-      inherit stdenv lib;
+      inherit stdenv lib extraMakeFlags;
 
       version = "6.1.0-rc8-asahi";
       modDirVersion = version;
 
       src = fetchFromGitHub {
-        # tracking: https://github.com/AsahiLinux/PKGBUILDs/blob/stable/linux-asahi/PKGBUILD
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.1-rc8-2";
-        hash = "sha256-P4PiqD4tF8ZiOxY59O4mYhDuQMZkoMjJuqmRGN0hJ/o=";
+        rev = "asahi-6.1-rc8-3";
+        hash = "sha256-DIfYpxyF8rjrkyiR7qxVphBnezTZ3JF6GTspbtuIIhc=";
       };
 
       kernelPatches = [
@@ -74,6 +73,19 @@
       extraMeta.branch = "6.1";
     } // (args.argsOverride or {});
 
-  linux_asahi = (pkgs.callPackage linux_asahi_pkg { });
+  inherit (pkgs.rustPlatform.rust) rustc;
+  inherit (pkgs.rustPlatform) rustLibSrc;
+  inherit (pkgs) rust-bindgen;
+
+  extraMakeFlags = [
+    "RUSTC=${rustc}/bin/rustc"
+    "BINDGEN=${rust-bindgen}/bin/bindgen"
+    "RUST_LIB_SRC=${rustLibSrc}"
+  ];
+
+  linux_asahi = (pkgs.callPackage linux_asahi_pkg { inherit extraMakeFlags; }).overrideAttrs(prior: {
+    nativeBuildInputs =
+      prior.nativeBuildInputs ++ [ rustc rust-bindgen rustLibSrc ];
+  });
 in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_asahi)
 

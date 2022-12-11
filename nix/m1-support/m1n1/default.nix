@@ -28,7 +28,6 @@ in stdenv.mkDerivation rec {
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    # tracking: https://github.com/AsahiLinux/PKGBUILDs/blob/stable/m1n1/PKGBUILD
     owner = "AsahiLinux";
     repo = "m1n1";
     rev = "v${version}";
