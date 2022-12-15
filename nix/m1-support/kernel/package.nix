@@ -40,14 +40,14 @@
     linuxKernel.manualConfig rec {
       inherit stdenv lib extraMakeFlags;
 
-      version = "6.1.0-rc8-asahi";
+      version = "6.1.0-asahi";
       modDirVersion = version;
 
       src = fetchFromGitHub {
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.1-rc8-3";
-        hash = "sha256-DIfYpxyF8rjrkyiR7qxVphBnezTZ3JF6GTspbtuIIhc=";
+        rev = "asahi-6.1-2";
+        hash = "sha256-grQytmYoAlPxRI8mYQjZFduD3BH7PA7rz1hyInJb4JA=";
       };
 
       kernelPatches = [

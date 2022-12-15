@@ -25,13 +25,13 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "m1n1";
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     rev = "v${version}";
-    hash = "sha256-KbiFE0eg/w/GcDRXSPysy1MMC3gcLyKRasal+lbIsdo=";
+    hash = "sha256-HEhsg3/OkMvAHvu16VFun87SNBPin69CL6XllE7sb4g=";
     fetchSubmodules = true;
   };
 
