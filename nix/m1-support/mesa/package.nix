@@ -9,8 +9,8 @@
     domain = "gitlab.freedesktop.org";
     owner = "asahi";
     repo = "mesa";
-    rev = "c1738bbe4eebde4d5392b1c14e2926f95e7655fd"; # from asahi/main
-    hash = "sha256-rxpD2FU5KvS/YsD3GbPWJkzZKqLqIhXsLLC17SHvFXI=";
+    rev = "08ff98967079a2e43a04f11fc646eef51a9103f1"; # from asahi/main
+    hash = "sha256-Y3AVHmajwJSD3cZejalF1SSt1R3RjMJf8SO3x1qTskw=";
   };
   mesonFlags = lib.filter (x: !(lib.hasPrefix "-Dxvmc-libs-path=" x)) oldAttrs.mesonFlags;
 })
