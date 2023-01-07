@@ -40,14 +40,14 @@
     linuxKernel.manualConfig rec {
       inherit stdenv lib extraMakeFlags;
 
-      version = "6.1.0-asahi";
+      version = "6.2.0-rc2-asahi";
       modDirVersion = version;
 
       src = fetchFromGitHub {
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.1-2";
-        hash = "sha256-grQytmYoAlPxRI8mYQjZFduD3BH7PA7rz1hyInJb4JA=";
+        rev = "asahi-6.2-rc2-1";
+        hash = "sha256-bfpxvTnyV3AKu74eAwWI6S6U0OurJ2suUwXk+ZlHN20=";
       };
 
       kernelPatches = [
@@ -70,7 +70,7 @@
       inherit configfile;
       config = readConfig configfile;
 
-      extraMeta.branch = "6.1";
+      extraMeta.branch = "6.2";
     } // (args.argsOverride or {});
 
   inherit (pkgs.rustPlatform.rust) rustc;
