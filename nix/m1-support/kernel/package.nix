@@ -40,17 +40,25 @@
     linuxKernel.manualConfig rec {
       inherit stdenv lib extraMakeFlags;
 
-      version = "6.2.0-rc2-asahi";
+      version = "6.2.0-rc3-asahi";
       modDirVersion = version;
 
       src = fetchFromGitHub {
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.2-rc2-1";
-        hash = "sha256-bfpxvTnyV3AKu74eAwWI6S6U0OurJ2suUwXk+ZlHN20=";
+        rev = "asahi-6.2-rc3-5";
+        hash = "sha256-4bnRZc71fakJOezW5phhWsUwcQNmV9NtAkqBQCbpuOo=";
       };
 
       kernelPatches = [
+        {
+          name = "rust-1.66";
+          patch = fetchpatch {
+            includes = [ "rust/*" ];
+            sha256 = "sha256-EPQnWO0ZNNqvscpEyRyh5UySeT+FIRjmGTXgQ2V4lRE=";
+            url = "https://github.com/Rust-for-Linux/linux/pull/947/commits/3f893e11f62f880f6d4e2bf6cda199a4366203a7.diff";
+          };
+        }
       ] ++ lib.optionals _4KBuild [
         # thanks to Sven Peter
         # https://lore.kernel.org/linux-iommu/20211019163737.46269-1-sven@svenpeter.dev/
@@ -75,7 +83,7 @@
 
   inherit (pkgs.rustPlatform.rust) rustc;
   inherit (pkgs.rustPlatform) rustLibSrc;
-  inherit (pkgs) rust-bindgen;
+  inherit (pkgs) rust-bindgen libgcc;
 
   extraMakeFlags = [
     "RUSTC=${rustc}/bin/rustc"
@@ -85,7 +93,9 @@
 
   linux_asahi = (pkgs.callPackage linux_asahi_pkg { inherit extraMakeFlags; }).overrideAttrs(prior: {
     nativeBuildInputs =
-      prior.nativeBuildInputs ++ [ rustc rust-bindgen rustLibSrc ];
+      prior.nativeBuildInputs ++ [ rustc rust-bindgen rustLibSrc  ];
+    buildInputs = [ libgcc ];
+    NIX_LDFLAGS = [ "-lgcc" ];
   });
 in pkgs.recurseIntoAttrs (pkgs.linuxPackagesFor linux_asahi)
 
