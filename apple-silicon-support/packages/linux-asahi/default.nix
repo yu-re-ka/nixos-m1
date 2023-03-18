@@ -46,7 +46,7 @@ let
           ${builtins.readFile ./config}
 
           # Patches
-          ${lib.strings.concatMapStringsSep "\n" ({extraConfig ? "", ...}: parseExtraConfig extraConfig) kernelPatches}
+          ${lib.concatMapStringsSep "\n" ({extraConfig ? "", ...}: parseExtraConfig extraConfig) kernelPatches}
         '';
 
       _kernelPatches = kernelPatches;
@@ -57,15 +57,15 @@ let
     (linuxKernel.manualConfig rec {
       inherit stdenv lib;
 
-      version = "6.1.0-asahi";
+      version = "6.2.0-asahi";
       modDirVersion = version;
 
       src = fetchFromGitHub {
         # tracking: https://github.com/AsahiLinux/PKGBUILDs/blob/stable/linux-asahi/PKGBUILD
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.1-2";
-        hash = "sha256-grQytmYoAlPxRI8mYQjZFduD3BH7PA7rz1hyInJb4JA=";
+        rev = "asahi-6.2-10";
+        hash = "sha256-SnmPb1Wjkby5YRI4Y4L6zXq83LmX8gj/ctB9DvTTYQ8=";
       };
 
       kernelPatches = [
@@ -84,17 +84,9 @@ let
         { name = "default-pagesize-16k";
           patch = ./default-pagesize-16k.patch;
         }
-      ] ++ lib.optionals (rustAtLeast "1.66.0") [
-        { name = "rust-1.66.0";
-          patch = ./rust_1_66_0.patch;
-        }
       ] ++ lib.optionals (bindgenAtLeast "0.63.0") [
         { name = "rust-bindgen";
           patch = ./rust-bindgen-fix.patch;
-        }
-      ] ++ lib.optionals (rustAtLeast "1.67.0") [
-        { name = "rust-1.67.0";
-          patch = ./rust_1_67_0.patch;
         }
       ] ++ _kernelPatches;
 

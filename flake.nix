@@ -5,7 +5,7 @@
     nixpkgs = {
       # https://hydra.nixos.org/jobset/mobile-nixos/unstable/evals
       # these evals have a cross-compiled stdenv available
-      url = "github:nixos/nixpkgs/988cc958c57ce4350ec248d2d53087777f9e1949";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
 
     rust-overlay = {
@@ -43,7 +43,7 @@
               ];
             };
           in {
-            inherit (pkgs) m1n1 uboot-asahi;
+            inherit (pkgs) m1n1 uboot-asahi mesa-asahi-edge linux-asahi;
 
             installer-bootstrap =
               let
