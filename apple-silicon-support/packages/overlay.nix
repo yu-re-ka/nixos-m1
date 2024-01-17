@@ -6,6 +6,5 @@ final: prev: {
   mesa-asahi-edge = final.callPackage ./mesa-asahi-edge { inherit (prev) mesa; };
   alsa-ucm-conf-asahi = final.callPackage ./alsa-ucm-conf-asahi { inherit (prev) alsa-ucm-conf; };
   speakersafetyd = final.callPackage ./speakersafetyd { };
-  bankstown-lv2 = final.callPackage ./bankstown-lv2 { };
   asahi-audio = final.callPackage ./asahi-audio { };
 }
