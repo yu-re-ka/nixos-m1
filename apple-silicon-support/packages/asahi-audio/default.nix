@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "asahi-audio";
-    rev = "v${version}";
-    hash = "sha256-NxTQD742U2FUZNmw7RHuOruMuTRLtAh1HDlMV9EzQkg=";
+    rev = "839c671e256256ecc194198c134ec4f026595ecd";
+    hash = "sha256-PKfyG0WKZN0KrhKNzye1gEcKMvfkNjOBMhvvHjs8BLI=";
   };
 
   preBuild = ''
