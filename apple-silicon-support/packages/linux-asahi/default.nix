@@ -26,7 +26,11 @@ let
           name = "Asahi config";
           patch = null;
           extraStructuredConfig = with lib.kernel; {
+            RUST = yes;
+            DRM = yes;
             ARCH_APPLE = yes;
+            HID_APPLE = module;
+            ARM64_16K_PAGES = yes;
             APPLE_WATCHDOG = yes;
             APPLE_PMGR_PWRSTATE = yes;
             APPLE_AIC = yes;
@@ -39,7 +43,6 @@ let
             DRM_VGEM = no;
             DRM_SCHED = yes;
             DRM_GEM_SHMEM_HELPER = yes;
-            SUSPEND = yes;
           };
           features.rust = true;
         }
