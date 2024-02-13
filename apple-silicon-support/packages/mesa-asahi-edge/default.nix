@@ -40,7 +40,6 @@
 
   # replace patches with ones tweaked slightly to apply to this version
   patches = [
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
     ./opencl.patch
   ];
 })
