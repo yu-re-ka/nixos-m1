@@ -50,20 +50,13 @@
       [ pkgs.speakersafetyd ];
     services.udev.packages = [ pkgs.speakersafetyd ];
 
-    # set up enivronment so that asahi-audio and UCM configs are used
-    environment.etc = builtins.listToAttrs (builtins.map
-      (f: { name = f; value = { source = "${asahi-audio}/share/${f}"; }; })
-      asahi-audio.providedConfigFiles);
+    # set up environment so that asahi-audio and UCM configs are used
+    services.pipewire.configPackages = [ pkgs.asahi-audio ];
+    services.pipewire.wireplumber.configPackages = [ pkgs.asahi-audio ];
     environment.variables.ALSA_CONFIG_UCM2 = "${pkgs.alsa-ucm-conf-asahi}/share/alsa/ucm2";
 
     # set up pipewire and wireplumber to use asahi-audio configs and plugins
     systemd.user.services.pipewire.environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
     systemd.user.services.wireplumber.environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-    systemd.user.services.pipewire.environment.LV2_PATH = let
-      lv2Plugins = [ lsp-plugins pkgs.bankstown-lv2 ];
-    in lib.makeSearchPath "lib/lv2" lv2Plugins;
-    systemd.user.services.wireplumber.environment.LV2_PATH = let
-      lv2Plugins = [ lsp-plugins pkgs.bankstown-lv2 ];
-    in lib.makeSearchPath "lib/lv2" lv2Plugins;
   };
 }

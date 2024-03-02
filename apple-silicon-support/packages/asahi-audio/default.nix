@@ -1,6 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, lsp-plugins
+, bankstown-lv2
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +35,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # no need to link the asahi-audio dir globally
-    mv $out/share/asahi-audio $out
+    mv $out/share/asahi-audio/* $out/share
+    rmdir $out/share/asahi-audio/
   '';
 
   # list of config files installed in $out/share/ and destined for
@@ -48,4 +51,5 @@ stdenv.mkDerivation rec {
     "pipewire/pipewire.conf.d/99-asahi.conf"
     "pipewire/pipewire-pulse.conf.d/99-asahi.conf"
   ];
+  passthru.requiredLv2Packages = [ lsp-plugins bankstown-lv2 ];
 }
