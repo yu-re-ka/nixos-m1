@@ -1,17 +1,11 @@
 { lib
 , fetchFromGitLab
-, pkgs
-, meson
-, llvmPackages
+, mesa
 }:
 
-# don't bother to provide Darwin deps
-((pkgs.callPackage ./vendor { OpenGL = null; Xplugin = null; }).override {
-  galliumDrivers = [ "swrast" "asahi" ];
+(mesa.override {
+  galliumDrivers = [ "swrast" "asahi" "zink" ];
   vulkanDrivers = [ "swrast" "asahi" ];
-  enableGalliumNine = false;
-  # libclc and other OpenCL components are needed for geometry shader support on Apple Silicon
-  enableOpenCL = true;
 }).overrideAttrs (oldAttrs: {
   # version must be the same length (i.e. no unstable or date)
   # so that system.replaceRuntimeDependencies can work
@@ -25,22 +19,14 @@
     hash = "sha256-Ny4M/tkraVLhUK5y6Wt7md1QBtqQqPDUv+aY4MpNA6Y=";
   };
 
-  mesonFlags = oldAttrs.mesonFlags ++ [
+  mesonFlags = lib.filter (x: !(lib.hasPrefix "-Dopencl-spirv=" x)) oldAttrs.mesonFlags ++ [
       # we do not build any graphics drivers these features can be enabled for
       "-Dgallium-va=disabled"
       "-Dgallium-vdpau=disabled"
       "-Dgallium-xa=disabled"
-      # does not make any sense
-      "-Dandroid-libbacktrace=disabled"
-      "-Dintel-rt=disabled"
-      # do not want to add the dependencies
-      "-Dlibunwind=disabled"
-      "-Dlmsensors=disabled"
     ];
 
-  # replace patches with ones tweaked slightly to apply to this version
-  patches = [
-    ./disk_cache-include-dri-driver-path-in-cache-key.patch
-    ./opencl.patch
-  ];
+  patches = map (x: if lib.hasSuffix "cross_clc.patch" x then ./0001-meson-Add-mesa-clc-and-install-mesa-clc-options.patch else x) oldAttrs.patches;
+
+  outputs = lib.remove "spirv2dxil" oldAttrs.outputs;
 })
