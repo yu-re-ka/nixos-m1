@@ -9,7 +9,7 @@ let
     buildLinux rec {
       inherit stdenv lib;
 
-      version = "6.12.4-asahi";
+      version = "6.12.8-asahi";
       modDirVersion = version;
       extraMeta.branch = "6.12";
       extraMeta.broken = false;
@@ -18,8 +18,8 @@ let
         # tracking: https://github.com/AsahiLinux/linux/tree/asahi-wip (w/ fedora verification)
         owner = "AsahiLinux";
         repo = "linux";
-        rev = "asahi-6.12.4-1";
-        hash = "sha256-0JJtJWM0eNKcBMkNRCOA6Vpoi6Ca1QCOlsmSQKRHAUA=";
+        rev = "asahi-6.12.8-1";
+        hash = "sha256-0vlwdMIHn5HyWyHPetDHFRbUEMdFVrctw5BkG0vW+R4=";
       };
 
       kernelPatches = [
